@@ -240,7 +240,9 @@ module.exports = function (sandbox) {
             f === Math.tan) {
             return create_concrete_invoke(f);
         } else {
-            if (f === String.prototype.indexOf) {
+            if (f === Array.prototype.push) {
+                return getSingle(sfuns.array_push);
+            } else if (f === String.prototype.indexOf) {
                 return getSingle(sfuns.string_indexOf);
             } else if (f === String.prototype.charCodeAt) {
                 return getSingle(sfuns.string_charCodeAt);

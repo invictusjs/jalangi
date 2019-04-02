@@ -292,7 +292,7 @@ def symbolic (filee, inputs, analysis, jalangi=util.DEFAULT_INSTALL):
     os.chdir("jalangi_tmp")
     (instrumented_f, out) = instrument(os.path.join(os.pardir,filee), jalangi=jalangi)
     i = 0
-    iters = 1
+    iters = 0
     while i <= iters and i <= inputs:
         try:                    # Ignore failures on first iteration
             os.remove("inputs.js")

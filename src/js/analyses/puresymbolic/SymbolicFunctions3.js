@@ -188,4 +188,9 @@
 
     }
 
+    sandbox.array_push = function push (e) {
+        this.arr[this.length] = e;
+        this.length += 1;
+    };
+
 }(module.exports));

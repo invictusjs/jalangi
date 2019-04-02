@@ -34,6 +34,7 @@ module.exports = function (sandbox) {
     //-------------------------------------- Symbolic functions -----------------------------------------------------------
 
     var Symbolic = require('./../concolic/Symbolic');
+    var SymbolicArray = require('./SymbolicArray');
     var SymbolicBool = require('./../concolic/SymbolicBool');
     var SymbolicLinear = require('./../concolic/SymbolicLinear');
     var SymbolicStringExpression = require('./SymbolicStringExpression');
@@ -105,6 +106,10 @@ module.exports = function (sandbox) {
         J$.addAxiom(B(0, ">=", ret.getLength(), 0));
         J$.addAxiom(B(0, "<=", ret.getLength(), MAX_STRING_LENGTH));
         return ret;
+    }
+
+    function makeSymbolicArray(val) {
+        return new SymbolicArray(val);
     }
 
 
@@ -670,6 +675,12 @@ module.exports = function (sandbox) {
         base = initUndefinedForBaseOfG(base, offset);
 
         offset = pc.concretize(offset);
+
+        if (base instanceof SymbolicArray) {
+            if (offset == "push") {
+                return Array.prototype.push;
+            }
+        }
 
         if (base instanceof SymbolicStringExpression) {
             if (offset === "length") {
