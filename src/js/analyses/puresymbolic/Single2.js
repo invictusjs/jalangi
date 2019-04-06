@@ -91,6 +91,8 @@ module.exports = function (sandbox) {
             ret = makeSymbolicString(idx);
         } else if (type === 'number' || type === 'boolean') {
             ret = makeSymbolicNumber(idx);
+        } else if (val instanceof Array) {
+            ret = makeSymbolicArray(val, idx);
         } else {
             throw new Error("Cannot make " + val + " of type " + (typeof val) + " symbolic");
         }
