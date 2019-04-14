@@ -7,7 +7,7 @@
     var STATS_FILE_NAME = "jalangi_stats";
 
 
-    StatCollector.STAT_FLAG = true;
+    StatCollector.STAT_FLAG = false;
 
     StatCollector.resumeTimer = function (timerName) {
         var timer;

@@ -32,11 +32,11 @@ module.exports = function (sandbox) {
     var EVAL_ORG = eval;
 
 
-    var TRACE_CALL = false;
-    var TRACE_BRANCH = false;
-    var TRACE_WRITE = false;
-    var TRACE_RETURNS = false;
-    var TRACE_TESTS = false;
+    var TRACE_CALL = true;
+    var TRACE_BRANCH = true;
+    var TRACE_WRITE = true;
+    var TRACE_RETURNS = true;
+    var TRACE_TESTS = true;
 
     var exceptionVal;
     var returnVal = [];
@@ -75,7 +75,10 @@ module.exports = function (sandbox) {
         console.log(pad + "                  in predicate form " + pc.getFormulaFromBDD(pc.getPC().disjunctAll()).toString());
         console.log(pad + "  Aggregate path constraint in BDD form " + pc.getAggregatePC().disjunctAll().toString());
         console.log(pad + "                          in predicate form " + pc.getFormulaFromBDD(pc.getAggregatePC().disjunctAll()).toString());
-        console.log(pad + "  Aggregate return value " + pc.getReturnVal());
+        var tmpRetVal = pc.getReturnVal();
+        console.log(pad + "  Aggregate return value " + tmpRetVal);
+        //if (tmpRetVal && tmpRetVal.toString().indexOf('NOT_OBLIVIOUS') != -1)
+            //pc.generateInputs(tmpRetVal);
     }
 
 
@@ -773,8 +776,8 @@ module.exports = function (sandbox) {
         var ret2 = pc.branchBoth(iid, pc.getPC(), left, switchLeft, makePredicate);
         if (TRACE_BRANCH) {
             console.log(pad + "Branching at " + getIIDInfo(iid) + " with result " + ret2);
-            console.log(pad + "true branch condition in BDD form " + ret.toString());
-            console.log(pad + "                          in predicate form " + pc.getFormulaFromBDD(ret).toString());
+            //console.log(pad + "true branch condition in BDD form " + ret.toString());
+            //console.log(pad + "                          in predicate form " + pc.getFormulaFromBDD(ret).toString());
         }
         return ret2;
     }
@@ -793,8 +796,8 @@ module.exports = function (sandbox) {
         var ret2 = pc.branchBoth(iid, pc.getPC(), left, lastVal, makePredicate);
         if (TRACE_BRANCH) {
             console.log(pad + "Branching at " + getIIDInfo(iid) + " with result " + ret2);
-            console.log(pad + "  true branch condition in BDD form " + ret.toString());
-            console.log(pad + "                          in predicate form " + pc.getFormulaFromBDD(ret).toString());
+            //console.log(pad + "  true branch condition in BDD form " + ret.toString());
+            //console.log(pad + "                          in predicate form " + pc.getFormulaFromBDD(ret).toString());
         }
         return ret2;
     }
