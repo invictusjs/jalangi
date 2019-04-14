@@ -849,6 +849,24 @@
         return ret;
     }
 
+    function wrapIfWithFuncExpr(node, body) {
+        printIidToLoc(node);
+        var iid1 = getIid();
+        printIidToLoc(node);
+        var l = labelCounter++;
+        var ret = replaceInStatement(
+            "(function () { jalangiLabel" + l + ": while(true) { try {" + RP + "1} catch(" + astUtil.JALANGI_VAR +
+                "e) { //console.log(" + astUtil.JALANGI_VAR + "e); console.log(" +
+                astUtil.JALANGI_VAR + "e.stack);\n " + logUncaughtExceptionFunName + "(" + RP + "2," + astUtil.JALANGI_VAR +
+                "e); } finally { if (" + logFunctionReturnFunName + "(" +
+                RP + "3)) continue jalangiLabel" + l + ";\n else \n  return " + logReturnAggrFunName + "();\n }\n }}());", body,
+            iid1,
+            getIid()
+        );
+        transferLoc(ret[0], node);
+        return ret;
+    }
+
     function syncDefuns(node, scope, isScript) {
         var ret = [], ident;
         if (!isScript) {
@@ -1201,6 +1219,13 @@
         return node;
     }
 
+    function funIf(node) {
+        var ret = wrapConditional(node.test, node.test);
+        node.test = ret;
+        ret_node = wrapIfWithFuncExpr(node, node.test)[0];
+        ret_node.expression.callee = instrumentCall(ret_node.expression.callee, false);
+        return ret_node;
+    }
 
     var visitorOps = {
         "Program":function (node) {
@@ -1257,7 +1282,7 @@
             return node;
         },
         "ConditionalExpression":funCond,
-        "IfStatement":funCond,
+        "IfStatement":funIf,
         "WhileStatement":funCond,
         "DoWhileStatement":funCond,
         "ForStatement":funCond
