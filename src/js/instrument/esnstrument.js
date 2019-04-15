@@ -863,6 +863,9 @@
             iid1,
             getIid()
         );
+        //console.log(JSON.stringify(ret));
+        var callee = ret[0].expression.callee;
+        ret[0].expression.callee = wrapLiteral(callee, callee, N_LOG_FUNCTION_LIT)
         transferLoc(ret[0], node);
         return ret;
     }
