@@ -428,14 +428,18 @@ module.exports = function (sandbox) {
         oldValue = makePredValues(BDD.one, oldValue);
         newValue = makePredValues(pc.getPC(), newValue);
 
-
+        var newVal, oldVal, newSym;
         var i, len, pred, notPc = new PredValues(pc.getPC().disjunctAll().not(), true);
         len = newValue.values.length;
         for (i = 0; i < len; ++i) {
             pred = pc.getPC().and(newValue.values[i].pred);
             if (!pred.isZero()) {
                 if (STAT_FLAG) stats.addToCounter("operations");
-                ret = PredValues.addValue(ret, pred, newValue.values[i].value);
+                newVal = newValue.values[i].value;
+                if (ret && isSymbolic(ret.value) || isSymbolic(newValue.values[i].value)) {
+                    newVal = (newSym = (newSym || J$.readInput(0, true)));
+                }
+                ret = PredValues.addValue(ret, pred, newVal);
             }
         }
 
@@ -443,7 +447,10 @@ module.exports = function (sandbox) {
         for (i = 0; i < len; ++i) {
             pred = notPc.and(oldValue.values[i].pred);
             if (!pred.isZero()) {
-                ret = PredValues.addValue(ret, pred, oldValue.values[i].value);
+                if (ret && isSymbolic(ret.value) || isSymbolic(oldValue.values[i].value)) {
+                    oldVal = (newSym = (newSym || J$.readInput(0, true)));
+                }
+                ret = PredValues.addValue(ret, pred, oldVal);
             }
         }
         if (STAT_FLAG) stats.addToAccumulator("vs-size", ret.size());
