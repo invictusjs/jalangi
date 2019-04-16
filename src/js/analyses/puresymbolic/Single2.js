@@ -731,7 +731,12 @@ module.exports = function (sandbox) {
 
         base = pc.concretize(base);
 
-        base[offset] = val;
+        if (base instanceof SymbolicArray && typeof offset === 'number') {
+            base.arr[offset] = val;
+        } else {
+            base[offset] = val;
+        }
+
         return val;
     }
 
