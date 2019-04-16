@@ -681,6 +681,8 @@ module.exports = function (sandbox) {
         if (base instanceof SymbolicArray) {
             if (offset == "push") {
                 return Array.prototype.push;
+            } else if (typeof offset === "number") {
+                return base.arr[offset];
             }
         }
 
