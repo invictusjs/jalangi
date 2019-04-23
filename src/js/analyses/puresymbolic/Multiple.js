@@ -447,6 +447,7 @@ module.exports = function (sandbox) {
         for (i = 0; i < len; ++i) {
             pred = notPc.and(oldValue.values[i].pred);
             if (!pred.isZero()) {
+                oldVal = oldValue.values[i].value;
                 if (ret && isSymbolic(ret.value) || isSymbolic(oldValue.values[i].value)) {
                     oldVal = (newSym = (newSym || J$.readInput(0, true)));
                 }
