@@ -1225,7 +1225,7 @@
     function funIf(node) {
         var ret = wrapConditional(node.test, node.test);
         node.test = ret;
-        ret_node = wrapIfWithFuncExpr(node, node)[0];
+        var ret_node = wrapIfWithFuncExpr(node, node)[0];
         ret_node.expression.callee = instrumentCall(ret_node.expression.callee, false);
         return ret_node;
     }
