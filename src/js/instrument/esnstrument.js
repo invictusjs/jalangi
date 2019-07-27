@@ -869,6 +869,27 @@
         transferLoc(ret[0], node);
         return ret;
     }
+    function forToForAll(node) {
+        var declarations = MAP(node.init.declarations, function (def) {
+            if (def.init !== null) {
+                var createSymbolic = replaceInExpr(
+                    logMethodCallFunName + "(" + RP + "1, J$, 'readInput', false)(" + RP + "2)",
+                    getIid(),
+                    def.init.arguments[2]
+                );
+
+                var init = wrapWrite(def.init, createLiteralAst(def.id.name), createSymbolic, def.id, false, false);
+                def.init = init;
+            }
+            return def;
+        });
+        node.init.declarations = declarations;
+
+        var ret = replaceInStatement(
+            "{ " + RP + "1; { " + RP + "2 } }",
+            node.init, node.body.body);
+        return ret;
+    }
 
     function syncDefuns(node, scope, isScript) {
         var ret = [], ident;
@@ -1230,6 +1251,14 @@
         return ret_node;
     }
 
+    function funFor(node) {
+        var ret = wrapConditional(node.test, node.test);
+        node.test = ret;
+        var ret_node = forToForAll(node)[0];
+        //console.log(JSON.stringify(ret_node, null, 2));
+        return ret_node;
+    }
+
     var visitorOps = {
         "Program":function (node) {
             if (wrapProgramNode) {
@@ -1288,7 +1317,7 @@
         "IfStatement":funIf,
         "WhileStatement":funCond,
         "DoWhileStatement":funCond,
-        "ForStatement":funCond
+        "ForStatement":funFor
     };
 
     var exprDepth = 0;
