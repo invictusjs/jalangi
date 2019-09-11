@@ -1254,9 +1254,11 @@
     function funFor(node) {
         var ret = wrapConditional(node.test, node.test);
         node.test = ret;
-        var ret_node = forToForAll(node)[0];
-        //console.log(JSON.stringify(ret_node, null, 2));
-        return ret_node;
+        if (node.init.declarations[0].id.name != 'x') {
+            return forToForAll(node)[0];
+        } else {
+            return node;
+        }
     }
 
     var visitorOps = {

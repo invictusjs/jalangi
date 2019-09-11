@@ -686,7 +686,7 @@ module.exports = function (sandbox) {
             }
         }
         if (isSymbolicNumber(offset)) {
-            return base[-1];
+            return base.arr[-1];
         }
 
         if (base instanceof SymbolicStringExpression) {
@@ -737,7 +737,7 @@ module.exports = function (sandbox) {
         if (base instanceof SymbolicArray && typeof offset === 'number') {
             base.arr[offset] = val;
         } else if (isSymbolicNumber(offset)) {
-            base[-1] = val;
+            base.arr[-1] = val;
         } else {
             base[offset] = val;
         }
